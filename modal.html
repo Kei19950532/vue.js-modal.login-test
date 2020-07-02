@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Modalogin</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+  <link rel="stylesheet" href="https://cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
+  <link rel="stylesheet" href="https://cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+
+  <style>
+    .bg {
+      position: fixed;
+      display: flex;
+      background: rgba(0, 0, 0, .8);
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal {
+      width: 500px;
+      margin: 40px auto;
+      background: #fff;
+      border: 1px solid #d1d1d1;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .modal-header {
+      background: #f4f5f6;
+      position: relative;
+      text-align: center;
+      padding: 10px 15px;
+      border-bottom: 1px solid #d1d1d1;
+    }
+    .modal-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 0;
+    }
+    .modal-close {
+      position: absolute;
+      font-size: 18px;
+      top: calc(50% - 9px);
+      right: 15px;
+      cursor: pointer;
+    }
+    .modal-body {
+      padding: 30px 15px;
+      overflow: auto;
+      max-height: 400px;
+    }
+    .modal-footer {
+      border-top: 1px solid #d1d1d1;
+      padding: 15px;
+      text-align: right;
+    }
+    .modal-footer button {
+      margin: 0 0 0 10px;
+      cursor: pointer;
+    }
+  </style>
+
+</head>
+<body>
+<div class="container" id="app">
+  <h1>ModalLogin</h1>
+  <ul>
+    <li><a href="#" @click.prevent="open('login')">ログイン</a></li>
+  </ul>
+  <modal v-show="modal.login.isShow" @close="close('login')">
+    <template slot="header">ログイン</template>
+    <div slot="body" class="form">
+      <label for="username">ID/ユーザーネーム</label>
+      <input type="text" name="username" id="username">
+      <label for="password">パスワード</label>
+      <input type="password" name="password" id="password">
+    </div>
+    <div slot="footer">
+      <button class="button-outline" @click.prevent="close('login')">忘れた方はこちら</button>
+      <button class="button-outline" @click.prevent="close('login')">キャンセル</button>
+      <button>ログイン</button>
+    </div>
+  </modal>
+
+<script>
+  Vue.component('modal', {
+    template: `
+      <div class="bg">
+        <div class="modal">
+          <div class="modal-header">
+            <p class="modal-title">
+              <slot name="header">タイトル</slot>
+            </p>
+            <i class="modal-close fas fa-times" @click="$emit('close')"></i>
+          </div>
+          <div class="modal-body">
+            <slot name="body"></slot>
+          </div>
+          <div class="modal-footer">
+            <slot name="footer"></slot>
+          </div>
+        </div>
+      </div>
+    `
+  });
+
+  var vm = new Vue({
+    el: '#app',
+    data: {
+      modal: {
+        login: { isShow: false },
+        terms: { isShow: false },
+      }
+    },
+    methods: {
+      open: function (modalName) {
+        this.modal[modalName].isShow = true;
+      },
+      close: function (modalName) {
+        this.modal[modalName].isShow = false;
+      }
+    }
+  });
+</script>
+</body>
+</html>
